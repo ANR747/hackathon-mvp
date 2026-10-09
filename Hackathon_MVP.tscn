@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cgb55f2t12hy"]
+
+[node name="Node2D" type="Node2D" unique_id=1170515002]
+position = Vector2(186.24998, 188.74997)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=137537959]
