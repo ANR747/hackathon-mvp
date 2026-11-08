@@ -32,7 +32,7 @@ func fetch_cme_events(start_date: String, end_date: String) -> void:
 func _on_request_completed(
 	result: int,
 	response_code: int,
-	headers: PackedStringArray,
+	_headers: PackedStringArray,
 	body: PackedByteArray
 ) -> void:
 	if result != HTTPRequest.RESULT_SUCCESS:
