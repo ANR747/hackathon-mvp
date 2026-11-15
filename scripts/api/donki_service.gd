@@ -100,16 +100,34 @@ func _is_valid_date(date_value: String) -> bool:
 	var month_text := date_value.substr(5, 2)
 	var day_text := date_value.substr(8, 2)
 
-	return (
-		year_text.is_valid_int()
-		and month_text.is_valid_int()
-		and day_text.is_valid_int()
-		and int(year_text) > 0
-		and int(month_text) >= 1
-		and int(month_text) <= 12
-		and int(day_text) >= 1
-		and int(day_text) <= 31
-	)
+	if not _contains_only_digits(year_text):
+		return false
+	if not _contains_only_digits(month_text):
+		return false
+	if not _contains_only_digits(day_text):
+		return false
+
+	var year := int(year_text)
+	var month := int(month_text)
+	var day := int(day_text)
+
+	if year < 1 or month < 1 or month > 12 or day < 1:
+		return false
+
+	var days_in_month := [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	var is_leap_year := year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)
+	if month == 2 and is_leap_year:
+		days_in_month[1] = 29
+
+	return day <= days_in_month[month - 1]
+
+
+func _contains_only_digits(value: String) -> bool:
+	for index in range(value.length()):
+		var character_code := value.unicode_at(index)
+		if character_code < 48 or character_code > 57:
+			return false
+	return true
 
 
 func _on_request_completed(
