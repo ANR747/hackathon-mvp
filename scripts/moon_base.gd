@@ -7,6 +7,9 @@ extends Node2D
 const PLAYER_SCENE: PackedScene = preload("res://scripts/player.tscn")
 const WORLD_SIZE := Vector2(1536.0, 1024.0)
 const WALK_SPEED := 115.0
+const TOTAL_SURVEY_SITES := 3
+const OUTPOST_POSITION := Vector2(760.0, 435.0)
+const LANDING_SITE_POSITION := Vector2(1310.0, 254.0)
 
 var astronaut: CharacterBody2D
 var oxygen := 100.0
@@ -28,17 +31,20 @@ func _physics_process(delta: float) -> void:
 	if not active:
 		return
 	# The outpost keeps the mission viable; outside its radius oxygen drains slowly.
-	var at_outpost := astronaut.global_position.distance_to(Vector2(760, 330)) < 170.0
+	var player_position := _player_collision_position()
+	var at_outpost := player_position.distance_to(OUTPOST_POSITION) < 145.0
 	if at_outpost:
-		oxygen = minf(100.0, oxygen + delta * 2.0)
+		oxygen = minf(100.0, oxygen + delta * 8.0)
 	else:
 		oxygen = maxf(0.0, oxygen - delta * 0.22)
 	if oxygen <= 0.0:
 		active = false
+		astronaut.velocity = Vector2.ZERO
+		astronaut.set_physics_process(false)
 		notice_label.text = "SUIT OXYGEN DEPLETED  •  Press R to restart"
 	if Input.is_action_just_pressed("interact"):
 		_interact()
-	status_label.text = "O₂  %03d%%       SAMPLES  %d / %d" % [roundi(oxygen), samples, sites.size()]
+	status_label.text = "O₂  %03d%%       SAMPLES  %d / %d" % [roundi(oxygen), samples, TOTAL_SURVEY_SITES]
 
 func _configure_inputs() -> void:
 	_bind_key("ui_up", KEY_W)
@@ -59,7 +65,9 @@ func _bind_key(action: StringName, key: Key) -> void:
 func _add_player() -> void:
 	astronaut = PLAYER_SCENE.instantiate() as CharacterBody2D
 	astronaut.name = "Astronaut"
-	astronaut.position = Vector2(770, 545)
+	# The current player scene offsets its sprite and collision shape to align the
+	# astronaut with the figure already painted into the map image.
+	astronaut.position = Vector2(821, 660)
 	astronaut.z_index = 10
 	astronaut.velocity = Vector2.ZERO
 	astronaut.move_speed = WALK_SPEED
@@ -102,22 +110,33 @@ func _add_site(site_name: String, at: Vector2) -> void:
 	sites.append(site)
 
 func _on_site_entered(body: Node2D, site: Area2D, site_name: String) -> void:
-	if body != astronaut or not is_instance_valid(site):
+	if body != astronaut or not active or not is_instance_valid(site):
 		return
 	samples += 1
 	oxygen = minf(100.0, oxygen + 12.0)
 	notice_label.text = "SAMPLE LOGGED  •  %s" % site_name
 	site.queue_free()
 	sites.erase(site)
+	if samples == TOTAL_SURVEY_SITES:
+		notice_label.text = "ALL SURVEY SAMPLES RECOVERED  •  Return to the habitat"
 
 func _interact() -> void:
-	if astronaut.global_position.distance_to(Vector2(760, 330)) < 185.0:
+	if not active:
+		return
+	var player_position := _player_collision_position()
+	if player_position.distance_to(OUTPOST_POSITION) < 165.0:
 		oxygen = 100.0
 		notice_label.text = "HABITAT AIRLOCK  •  SUIT RECHARGED"
-	elif astronaut.global_position.distance_to(Vector2(1300, 190)) < 160.0:
+	elif player_position.distance_to(LANDING_SITE_POSITION) < 150.0:
 		notice_label.text = "LANDING SITE  •  SYSTEMS NOMINAL"
 	else:
 		notice_label.text = "Move near the habitat or landing site to interact."
+
+func _player_collision_position() -> Vector2:
+	var collision := astronaut.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision != null:
+		return astronaut.to_global(collision.position)
+	return astronaut.global_position
 
 func _add_hud() -> void:
 	var layer := CanvasLayer.new()
@@ -143,7 +162,7 @@ func _add_hud() -> void:
 	stack.add_child(status_label)
 	notice_label = Label.new()
 	notice_label.position = Vector2(20, 118)
-	notice_label.text = "WASD / Arrows move    E interact    R restart"
+	notice_label.text = "WASD / Arrows move    E interact    O₂ recharges at habitat    R restart"
 	notice_label.add_theme_color_override("font_color", Color(0.95, 0.96, 1.0))
 	layer.add_child(notice_label)
-	status_label.text = "O₂  100%       SAMPLES  0 / 3"
+	status_label.text = "O₂  100%       SAMPLES  0 / %d" % TOTAL_SURVEY_SITES

@@ -70,6 +70,7 @@ const INITIAL_RESOURCES := {
 	"Thermal Load": 24.0,
 	"Oxygen": 100.0
 }
+const MOON_SCENE_PATH := "res://scenes/moon_base.tscn"
 
 var resources: Dictionary = INITIAL_RESOURCES.duplicate()
 var subsystem_ready: Dictionary = {}
@@ -382,9 +383,9 @@ func _refresh_interface() -> void:
 			break
 
 	if mission_complete:
-		readiness_label.text = "MISSION STATUS: PAYLOAD DEPLOYED"
+		readiness_label.text = "MISSION STATUS: LUNAR TRANSFER"
 		readiness_label.add_theme_color_override("font_color", Color("#76d6a2"))
-		launch_button.text = "MISSION COMPLETE"
+		launch_button.text = "TRANSFER IN PROGRESS"
 		launch_button.disabled = true
 	elif _can_launch():
 		readiness_label.text = "READINESS: GO FOR LAUNCH"
@@ -438,6 +439,13 @@ func _on_launch_pressed() -> void:
 		return
 
 	_complete_launch()
+	countdown_label.text = "Flight confirmed. Lunar insertion in 2 seconds..."
+	await get_tree().create_timer(2.0).timeout
+	if current_sequence_id != launch_sequence_id or not mission_complete:
+		return
+	var scene_error := get_tree().change_scene_to_file(MOON_SCENE_PATH)
+	if scene_error != OK:
+		status_label.text = "FLIGHT CONFIRMED  •  COULD NOT OPEN LUNAR SURFACE"
 
 
 func _set_rocket_progress(value: float) -> void:
@@ -458,7 +466,7 @@ func _complete_launch() -> void:
 	resources["Thermal Load"] = minf(float(resources["Thermal Load"]) + 15.0, 100.0)
 
 	status_label.text = "FLIGHT CONFIRMED"
-	countdown_label.text = "Payload successfully deployed to the target orbit."
+	countdown_label.text = "Transfer confirmed. Crew cleared for lunar surface operations."
 	_refresh_interface()
 
 
