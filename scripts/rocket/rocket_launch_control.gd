@@ -387,8 +387,8 @@ func _refresh_interface() -> void:
 		readiness_label.add_theme_color_override("font_color", Color("#76d6a2"))
 		status_label.text = "FLIGHT CONFIRMED"
 		status_label.add_theme_color_override("font_color", Color("#76d6a2"))
-		launch_button.text = "TRANSFER IN PROGRESS"
-		launch_button.disabled = true
+		launch_button.text = "ENTER MOON BASE"
+		launch_button.disabled = false
 	elif _can_launch():
 		readiness_label.text = "READINESS: GO FOR LAUNCH"
 		readiness_label.add_theme_color_override("font_color", Color("#76d6a2"))
@@ -420,6 +420,9 @@ func _count_ready_systems() -> int:
 
 
 func _on_launch_pressed() -> void:
+	if mission_complete:
+		_enter_moon_base()
+		return
 	if not _can_launch():
 		return
 
@@ -450,9 +453,22 @@ func _on_launch_pressed() -> void:
 	await get_tree().create_timer(2.0).timeout
 	if current_sequence_id != launch_sequence_id or not mission_complete:
 		return
-	var scene_error := get_tree().change_scene_to_file(MOON_SCENE_PATH)
+	_enter_moon_base()
+
+
+func _enter_moon_base() -> void:
+	var moon_scene := load(MOON_SCENE_PATH) as PackedScene
+	if moon_scene == null:
+		status_label.text = "MOON SCENE LOAD FAILED"
+		readiness_label.text = "Could not load the lunar base scene. Check the Godot Output panel."
+		push_error("Unable to load lunar base scene: %s" % MOON_SCENE_PATH)
+		return
+
+	var scene_error := get_tree().change_scene_to_packed(moon_scene)
 	if scene_error != OK:
-		status_label.text = "FLIGHT CONFIRMED  •  COULD NOT OPEN LUNAR SURFACE"
+		status_label.text = "MOON SCENE CHANGE FAILED"
+		readiness_label.text = "Could not enter the lunar base. Check the Godot Output panel."
+		push_error("Unable to change to lunar base scene: %s" % error_string(scene_error))
 
 
 func _set_rocket_progress(value: float) -> void:
