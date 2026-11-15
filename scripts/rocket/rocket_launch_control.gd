@@ -385,22 +385,29 @@ func _refresh_interface() -> void:
 	if mission_complete:
 		readiness_label.text = "MISSION STATUS: LUNAR TRANSFER"
 		readiness_label.add_theme_color_override("font_color", Color("#76d6a2"))
+		status_label.text = "FLIGHT CONFIRMED"
+		status_label.add_theme_color_override("font_color", Color("#76d6a2"))
 		launch_button.text = "TRANSFER IN PROGRESS"
 		launch_button.disabled = true
 	elif _can_launch():
 		readiness_label.text = "READINESS: GO FOR LAUNCH"
 		readiness_label.add_theme_color_override("font_color", Color("#76d6a2"))
+		status_label.text = "GO FOR LAUNCH"
+		status_label.add_theme_color_override("font_color", Color("#76d6a2"))
 		launch_button.text = "INITIATE LAUNCH"
 		launch_button.disabled = false
 	elif all_checks_complete:
 		readiness_label.text = "READINESS: RESOURCE LIMITS NOT MET"
 		readiness_label.add_theme_color_override("font_color", Color("#f3c969"))
+		status_label.text = "RESOURCE LIMITS NOT MET"
+		status_label.add_theme_color_override("font_color", Color("#f3c969"))
 		launch_button.disabled = true
 	else:
 		readiness_label.text = "READINESS: %d / %d SYSTEMS CHECKED" % [
 			_count_ready_systems(), SYSTEMS.size()
 		]
 		readiness_label.add_theme_color_override("font_color", Color("#f3c969"))
+		status_label.add_theme_color_override("font_color", Color("#f3c969"))
 		launch_button.disabled = true
 
 
