@@ -5,7 +5,6 @@ extends Node2D
 ## walkable gameplay, HUD, sample sites, collisions, and map bounds remain live nodes.
 
 const PLAYER_SCENE: PackedScene = preload("res://scripts/player.tscn")
-const MAP_TEXTURE: Texture2D = preload("res://Image_Assets/ImageAssets_Map/IMG-20261021-WA0013.jpg")
 const WORLD_SIZE := Vector2(1536.0, 1024.0)
 const WALK_SPEED := 115.0
 
@@ -19,9 +18,7 @@ var sites: Array[Area2D] = []
 
 func _ready() -> void:
 	_configure_inputs()
-	_add_map_art()
 	_add_player()
-	_add_landmark_collisions()
 	_add_survey_sites()
 	_add_hud()
 
@@ -59,29 +56,6 @@ func _bind_key(action: StringName, key: Key) -> void:
 	if not InputMap.action_has_event(action, event):
 		InputMap.action_add_event(action, event)
 
-func _add_map_art() -> void:
-	var map := Sprite2D.new()
-	map.name = "Moon_Surface_Atlas_Composition"
-	map.texture = MAP_TEXTURE
-	map.centered = false
-	map.position = Vector2.ZERO
-	map.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	map.z_index = -20
-	add_child(map)
-	# Keep the lightweight atlas-backed TileMapLayer from the prior version.
-	var terrain := TileMapLayer.new()
-	terrain.name = "Terrain_TileMapLayer"
-	terrain.z_index = -19
-	var tileset := TileSet.new()
-	tileset.tile_size = Vector2i(32, 32)
-	var atlas := TileSetAtlasSource.new()
-	atlas.texture = load("res://Image_Assets/ImageAssets_Map/tilesets/Pixel-Art Lunar Base Asset Sheet(land) (1).png")
-	atlas.texture_region_size = Vector2i(32, 32)
-	if atlas.texture != null:
-		atlas.create_tile(Vector2i.ZERO)
-		tileset.add_source(atlas, 0)
-	terrain.tile_set = tileset
-	add_child(terrain)
 func _add_player() -> void:
 	astronaut = PLAYER_SCENE.instantiate() as CharacterBody2D
 	astronaut.name = "Astronaut"
@@ -104,30 +78,6 @@ func _add_player() -> void:
 	camera.limit_bottom = int(WORLD_SIZE.y)
 	astronaut.add_child(camera)
 	camera.make_current()
-
-func _add_landmark_collisions() -> void:
-	# Footprints match the habitat, greenhouse, launch platform, and highland rims.
-	_add_blocker(Vector2(760, 330), Vector2(285, 142))
-	_add_blocker(Vector2(480, 320), Vector2(155, 130))
-	_add_blocker(Vector2(1300, 190), Vector2(255, 125))
-	_add_blocker(Vector2(1390, 790), Vector2(290, 135))
-	_add_blocker(Vector2(70, 860), Vector2(210, 130))
-	_add_blocker(Vector2(1460, 540), Vector2(140, 230))
-	# Solid map perimeter.
-	_add_blocker(Vector2(WORLD_SIZE.x * 0.5, -16), Vector2(WORLD_SIZE.x, 32))
-	_add_blocker(Vector2(WORLD_SIZE.x * 0.5, WORLD_SIZE.y + 16), Vector2(WORLD_SIZE.x, 32))
-	_add_blocker(Vector2(-16, WORLD_SIZE.y * 0.5), Vector2(32, WORLD_SIZE.y))
-	_add_blocker(Vector2(WORLD_SIZE.x + 16, WORLD_SIZE.y * 0.5), Vector2(32, WORLD_SIZE.y))
-
-func _add_blocker(center: Vector2, size: Vector2) -> void:
-	var body := StaticBody2D.new()
-	body.position = center
-	var shape := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = size
-	shape.shape = rect
-	body.add_child(shape)
-	add_child(body)
 
 func _add_survey_sites() -> void:
 	_add_site("NORTH CRATER", Vector2(586, 150))

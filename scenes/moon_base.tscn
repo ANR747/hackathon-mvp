@@ -1,6 +1,159 @@
 [gd_scene format=3 uid="uid://77nh7vik4n1f"]
 
 [ext_resource type="Script" uid="uid://3hbnkv2iugn8" path="res://scripts/moon_base.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cngntw6wux6r2" path="res://Image_Assets/ImageAssets_Map/tilesets/Pixel-Art Lunar Base Asset Sheet (1).png" id="2_eoifi"]
+[ext_resource type="Texture2D" uid="uid://djw7dyyhytwj2" path="res://Image_Assets/ImageAssets_Map/IMG-20261021-WA0013.jpg" id="3_map"]
+
+[sub_resource type="RectangleShape2D" id="HabitatShape"]
+size = Vector2(370, 121)
+
+[sub_resource type="RectangleShape2D" id="GreenhouseShape"]
+size = Vector2(213.5, 153)
+
+[sub_resource type="RectangleShape2D" id="LandingPadShape"]
+size = Vector2(255, 112.5)
+
+[sub_resource type="RectangleShape2D" id="EastRidgeShape"]
+size = Vector2(267.5, 161.5)
+
+[sub_resource type="RectangleShape2D" id="WestRidgeShape"]
+size = Vector2(149, 118.25)
+
+[sub_resource type="RectangleShape2D" id="NorthCliffShape"]
+size = Vector2(220.5, 111.5)
+
+[sub_resource type="RectangleShape2D" id="TopBoundaryShape"]
+size = Vector2(1536, 32)
+
+[sub_resource type="RectangleShape2D" id="BottomBoundaryShape"]
+size = Vector2(1511, 37)
+
+[sub_resource type="RectangleShape2D" id="LeftBoundaryShape"]
+size = Vector2(32, 1024)
+
+[sub_resource type="RectangleShape2D" id="RightBoundaryShape"]
+size = Vector2(32, 1024)
 
 [node name="MoonBase" type="Node2D" unique_id=2074962656]
 script = ExtResource("1")
+
+[node name="MoonSurfaceMap" type="Sprite2D" parent="." unique_id=200010001]
+z_index = -20
+texture_filter = 1
+position = Vector2(-1, -11)
+texture = ExtResource("3_map")
+centered = false
+
+[node name="BuildingCollisions" type="Node2D" parent="." unique_id=200010002]
+
+[node name="Habitat" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010003]
+position = Vector2(760, 330)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/Habitat" unique_id=200010004]
+position = Vector2(53, -10.5)
+shape = SubResource("HabitatShape")
+
+[node name="Greenhouse" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010005]
+position = Vector2(480, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/Greenhouse" unique_id=200010006]
+position = Vector2(29.25, 0.5)
+shape = SubResource("GreenhouseShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/Greenhouse/CollisionShape2D" unique_id=586247510]
+
+[node name="LandingPad" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010007]
+position = Vector2(1300, 190)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/LandingPad" unique_id=200010008]
+position = Vector2(6, 44)
+shape = SubResource("LandingPadShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/LandingPad/CollisionShape2D" unique_id=759100111]
+
+[node name="EastRidge" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010009]
+position = Vector2(1390, 790)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/EastRidge" unique_id=200010010]
+position = Vector2(-125.75, 37.75)
+shape = SubResource("EastRidgeShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/EastRidge/CollisionShape2D" unique_id=1536518657]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="BuildingCollisions/EastRidge/CollisionShape2D" unique_id=1270071356]
+
+[node name="WestRidge" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010011]
+position = Vector2(70, 860)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/WestRidge" unique_id=200010012]
+position = Vector2(169, -314)
+shape = SubResource("WestRidgeShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D" unique_id=1730598202]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D" unique_id=25553145]
+position = Vector2(79, -312)
+shape = SubResource("WestRidgeShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D/CollisionShape2D2" unique_id=487323968]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D/CollisionShape2D2" unique_id=521472867]
+position = Vector2(674, 485)
+shape = SubResource("WestRidgeShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D/CollisionShape2D2/CollisionShape2D2" unique_id=153001470]
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D" unique_id=586617504]
+position = Vector2(709, -118)
+shape = SubResource("WestRidgeShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/WestRidge/CollisionShape2D/CollisionShape2D3" unique_id=903017208]
+
+[node name="NorthCliff" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010013]
+position = Vector2(1460, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/NorthCliff" unique_id=200010014]
+position = Vector2(-1182.25, 146.75)
+shape = SubResource("NorthCliffShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/NorthCliff/CollisionShape2D" unique_id=599142029]
+
+[node name="MapBoundaryTop" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010015]
+position = Vector2(768, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/MapBoundaryTop" unique_id=200010016]
+shape = SubResource("TopBoundaryShape")
+
+[node name="MapBoundaryBottom" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010017]
+position = Vector2(768, 1040)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/MapBoundaryBottom" unique_id=200010018]
+position = Vector2(7.5, -18)
+shape = SubResource("BottomBoundaryShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/MapBoundaryBottom/CollisionShape2D" unique_id=1885866760]
+
+[node name="MapBoundaryLeft" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010019]
+position = Vector2(-16, 512)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/MapBoundaryLeft" unique_id=200010020]
+shape = SubResource("LeftBoundaryShape")
+
+[node name="MapBoundaryRight" type="StaticBody2D" parent="BuildingCollisions" unique_id=200010021]
+position = Vector2(1552, 512)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingCollisions/MapBoundaryRight" unique_id=200010022]
+shape = SubResource("RightBoundaryShape")
+
+[node name="PixelArtLunarBaseAssetSheet(1)" type="Sprite2D" parent="." unique_id=171379829]
+z_index = -30
+position = Vector2(-1455, 366)
+texture = ExtResource("2_eoifi")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1030490724]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1631192206]
+position = Vector2(222, -382)
+shape = SubResource("WestRidgeShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionShape2D" unique_id=1274359232]
