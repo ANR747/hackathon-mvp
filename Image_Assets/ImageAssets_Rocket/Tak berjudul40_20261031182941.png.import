@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmed6ih58axmo"
-path="res://.godot/imported/Pixel-Art Lunar Base Asset Sheet.png-a4f2f1440eaa0af06838cff4eddff2bd.ctex"
+uid="uid://2qmv85svn1ho"
+path="res://.godot/imported/Tak berjudul40_20261031182941.png-abe859070d78b715f0013bda50cb669b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tilesets/Pixel-Art Lunar Base Asset Sheet.png"
-dest_files=["res://.godot/imported/Pixel-Art Lunar Base Asset Sheet.png-a4f2f1440eaa0af06838cff4eddff2bd.ctex"]
+source_file="res://Image_Assets/ImageAssets_Rocket/Tak berjudul40_20261031182941.png"
+dest_files=["res://.godot/imported/Tak berjudul40_20261031182941.png-abe859070d78b715f0013bda50cb669b.ctex"]
 
 [params]
 

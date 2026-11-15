@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t06m01xm0bwr"
-path="res://.godot/imported/Lunar Base Terrain and Objects Tileset-1.png-290018ec4f8d3deed2a4ecf79c7f2dd0.ctex"
+uid="uid://cbf4pg6xj6nw3"
+path="res://.godot/imported/Lunar Base Terrain and Objects Tileset-1.png-9ab6bb039e2f5a6445168bbebebd8fab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tilesets/Lunar Base Terrain and Objects Tileset-1.png"
-dest_files=["res://.godot/imported/Lunar Base Terrain and Objects Tileset-1.png-290018ec4f8d3deed2a4ecf79c7f2dd0.ctex"]
+source_file="res://Image_Assets/ImageAssets_Map/Lunar Base Terrain and Objects Tileset-1.png"
+dest_files=["res://.godot/imported/Lunar Base Terrain and Objects Tileset-1.png-9ab6bb039e2f5a6445168bbebebd8fab.ctex"]
 
 [params]
 
